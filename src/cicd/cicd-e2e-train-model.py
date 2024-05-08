@@ -7,6 +7,7 @@ from domino import Domino
 from utils import read_config as read_config
 from utils import parse_evn_var as parse_evn_var
 from utils import parse_args as parse_args
+import json
 
 env_variables = {}
 
@@ -47,17 +48,34 @@ def get_hardware_tier_id(domino_url, user_api_key, hardware_tier_name):
 
 
 def job_start(
-    domino,
+    start_job_url,
+    project_id,
+    api_key,
     command,
-    hardware_tier_id,
+    branch_name,
+    hardware_tier,
     environment_id,
 ):
 
-    response = domino.job_start(
-        command,
-        hardware_tier_name=hardware_tier_id,
-        environment_id=environment_id,
+
+    headers = {
+        'X-Domino-Api-Key': api_key, #api key
+        'Content-Type': 'application/json'
+    }
+
+    payload = json.dumps({
+        "projectId": project_id,
+        "runCommand": command, 
+        "mainRepoGitRef": {
+        "refType": "branches",
+        "value": branch_name,
+        "hardwareTier": hardware_tier,
+        "environmentId": environment_id
+        }
+    }
     )
+
+    response = requests.request("POST", start_job_url, headers=headers, data=payload)
     print("job id :: ", response)
 
 
@@ -73,6 +91,7 @@ def main():
     logging.info(inputs.DOMINO_USER_API_KEY)
     logging.info(env_variables["DOMINO_API_HOST"])
     domino_url = env_variables["DOMINO_API_HOST"]
+    start_job_url = f"https://{domino_url}/api/jobs/v1/jobs"
 
     project = f"{env_variables['DOMINO_PROJECT_OWNER']}/{env_variables['DOMINO_PROJECT_NAME']}"
     domino = Domino(
@@ -82,11 +101,14 @@ def main():
     )
 
     job_start(
-            domino,
+            start_job_url,
+            get_project_id(domino_url, env_variables["DOMINO_PROJECT_NAME"], inputs.DOMINO_USER_API_KEY),
+            inputs.DOMINO_USER_API_KEY,
             env_variables["DOMINO_MODEL_TRAIN_SCRIPT"],
+            inputs.DOMINO_ENV.lower(),
             env_variables["DOMINO_HARDWARE_TIER"],
             env_variables["DOMINO_ENVIRONMENT_ID"],
-        )
+    )
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

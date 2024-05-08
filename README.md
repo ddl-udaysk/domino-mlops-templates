@@ -22,8 +22,8 @@ For this template project, we would establish three Dataplanes representing thre
 
 ## GitHub
 
-The project utilizes GitHub Actions workflows located in the `.github/workflows/` folder for Jobs, Apps, and Models to deploy them to different hardware tiers(dataplane), representing various stages of ML pipelines.
-Users need to register different environments in the github project and the environment variables representing domino environment the pipeline is running.
+The project utilizes GitHub Actions workflows located in the `.github/workflows/` folder for e2e mlops pipeline. The pipeline includes stages for data preparation , model training and model deployment. There are three workflows dev, staging and production representing different stages for ops pipeline. The config file "cicd-e2e-mlops-env-variables.ini" at src/cicd folder in the repo provides option to configure your data prep , training or deployment during diffrent stages of your ml ops pipeline  
+
 
 ![plot](./images/environments.png)
 ![plot](./images/environment_variables.png)
@@ -34,12 +34,11 @@ Users need to register different environments in the github project and the envi
 ### Workflow:
 
 1. User creates git based project in domino and creates the project in github with production representing the main branch of the project.
-2. User includes the worflows and code in folder src/cicd/ listed the template project for jobs , models and apps.
+2. User includes the worflows and code in folder src/cicd/ for mlops automation within the project.
 3. User creates environments in github environments with approvers and corresponding variables and secrets for the environment
-4. User adds for jobs, apps and models in the folder src/project and to the corresponding entity.
-5. User creates a branch of the project from the main branch and works on the code using Domino workspaces.
-6. When the user intends to push the code to production, they merge the code to the main branch, triggering the CI/CD pipeline via GitHub Actions workflows.
-7. The approval process from one stage to another involves approving the stage change in the experiment manager for model governed by experiment manager and GitHub or If they are jobs , apps it would be by github environments, which will deploy the resources to appropriate hardware tier representing the dataplane.
+4. User adds for dataprep script to dataprep folder, model training script to trainmdel folder in the folder src/project and registers them in the "cicd-e2e-mlops-env-variables.ini" conf file.
+6. When the user merges the code to the appropriate branch(dev, stage, prod), this triggering the CI/CD pipeline via GitHub Actions workflows of the corresponding stage.
+7. The approval process from one stage to another involves approving the stage change in the experiment manager for model governed by experiment manager and GitHub 
 
 ### ENVVIRONMENT VARIABLES
     DOMINO_ENV" : "Environment in which the current pipeline is running example DEV, STAGE or PROD"
