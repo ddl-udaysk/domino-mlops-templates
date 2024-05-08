@@ -5,11 +5,11 @@ name: Deploy Domino Model
 
 on:
   push:
-    branches: [ "e2emlops" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "e2emlops" ]
+    branches: [ "main" ]
   pull_request_target:
-    branches: [ "e2emlops" ]  
+    branches: [ "main" ]  
 
 permissions:
   contents: read
