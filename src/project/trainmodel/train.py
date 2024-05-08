@@ -2,7 +2,6 @@ import mlflow
 import numpy as np
 import pandas as pd
 import os
-from data import X_train, X_val, y_train, y_val
 from sklearn.linear_model import Ridge, ElasticNet
 from xgboost import XGBRegressor
 from sklearn.model_selection import ParameterGrid
@@ -10,10 +9,10 @@ from params import ridge_param_grid, elasticnet_param_grid, xgb_param_grid
 from utils import eval_metrics
 from datetime import datetime
 
-X_train_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_train"))
-X_test_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_test"))
-y_train_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_train"))
-y_test_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_test"))
+X_train_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_train"))
+X_test_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_test"))
+y_train_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_train"))
+y_test_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_test"))
 
 X_train = pd.read_csv(X_train_path, skiprows=1, header=None, engine='python')
 X_val = pd.read_csv(X_test_path, skiprows=1, header=None, engine='python')
@@ -54,16 +53,7 @@ for params in ParameterGrid(elasticnet_param_grid):
 
         metrics = eval_metrics(y_val, y_pred)
 
-        # Logging the inputs such as dataset
-        mlflow.log_input(
-            mlflow.data.from_numpy(X_train.toarray()),
-            context='Training dataset'
-        )
 
-        mlflow.log_input(
-            mlflow.data.from_numpy(X_val.toarray()),
-            context='Validation dataset'
-        )
 
         # Logging hyperparameters
         mlflow.log_params(params)
@@ -75,7 +65,7 @@ for params in ParameterGrid(elasticnet_param_grid):
         mlflow.sklearn.log_model(
             lr,
             "ElasticNet",
-            registered_model_name=model_name
+            registered_model_name=model_name,
             input_example=X_train,
             code_paths=['train.py','params.py','utils.py']
         )
