@@ -6,7 +6,7 @@ import json
 import os
 
 #Read in data
-path = "../../../data/WineQualityData.csv"
+path = "/mnt/code/data/WineQualityData.csv"
 df = pd.read_csv(path)
 print('Read in {} rows of data'.format(df.shape[0]))
 
