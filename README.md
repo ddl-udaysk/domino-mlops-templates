@@ -34,10 +34,10 @@ The project utilizes GitHub Actions workflows located in the `.github/workflows/
 
 ### Workflow:
 
-1. User creates git based project in domino and creates the project in github with production representing the main branch of the project.
-2. User includes the worflows and code in folder src/cicd/ for mlops automation within the project.
+1. User creates git based project in domino and creates the project in github with branches main, stage and dev branches representing production , staging and development respectively for the project.
+2. User includes the code in worflows and src/cicd/ folders for mlops automation within the project.
 3. User creates environments in github environments with approvers and corresponding variables and secrets for the environment
-4. User adds for dataprep script to dataprep folder, model training script to trainmdel folder in the folder src/project and registers them in the "cicd-e2e-mlops-env-variables.ini" conf file.
+4. User adds for dataprep script to dataprep folder, model training script to trainmodel folder in the folder src/project and registers them in the "cicd-e2e-mlops-env-variables.ini" conf file.
 6. When the user merges the code to the appropriate branch(dev, stage, prod), this triggering the CI/CD pipeline via GitHub Actions workflows of the corresponding stage.
 7. The approval process from one stage to another involves approving the stage change in the experiment manager for model governed by experiment manager and GitHub 
 
