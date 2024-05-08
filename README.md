@@ -27,6 +27,7 @@ The project utilizes GitHub Actions workflows located in the `.github/workflows/
 
 ![plot](./images/environments.png)
 ![plot](./images/environment_variables.png)
+![plot](./images/config_file.png)
 ![plot](./images/approvers.png)
 
 
