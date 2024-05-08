@@ -66,6 +66,5 @@ for params in ParameterGrid(elasticnet_param_grid):
             lr,
             "ElasticNet",
             registered_model_name=model_name,
-            input_example=X_train,
-            code_paths=['train.py','params.py','utils.py']
+            input_example=X_train
         )
