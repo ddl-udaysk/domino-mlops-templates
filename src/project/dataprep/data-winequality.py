@@ -34,10 +34,12 @@ y = df['quality'].astype('float64')
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-X_train_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_train"))
-X_test_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_test"))
-y_train_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_train"))
-y_test_path = str('/mnt/data/local/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_test"))
+X_train_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_train"))
+X_test_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"X_test"))
+y_train_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_train"))
+y_test_path = str('/mnt/data/{}/WineQualityData-{}.csv'.format(os.environ.get('DOMINO_PROJECT_NAME'),"y_test"))
+
+
 
 X_train.to_csv(X_train_path, index=False)
 X_test.to_csv(X_test_path, index=False)
