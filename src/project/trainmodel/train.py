@@ -6,6 +6,31 @@ from xgboost import XGBRegressor
 from sklearn.model_selection import ParameterGrid
 from params import ridge_param_grid, elasticnet_param_grid, xgb_param_grid
 from utils import eval_metrics
+from datetime import datetime
+
+
+
+print('MLFLOW_TRACKING_URI: ' + os.environ['MLFLOW_TRACKING_URI'])
+client = mlflow.tracking.MlflowClient()
+myprefix=''
+
+now = datetime.now()
+date_time_str = now.strftime("%m-%d-%Y")
+
+experiment_name = 'demo'+'-' + os.environ['DOMINO_STARTING_USERNAME'] + '-' + os.environ['DOMINO_PROJECT_NAME']
+model_name = 'demo'+'-' + os.environ['DOMINO_PROJECT_NAME']
+if myprefix!='':
+    experiment_name = myprefix + '-' + experiment_name
+print(experiment_name)
+
+experiment = client.get_experiment_by_name(name=experiment_name)
+if(experiment is None):
+    print('Creating experiment ')
+    client.create_experiment(name=experiment_name)
+    experiment = client.get_experiment_by_name(name=experiment_name)
+
+print(experiment_name)
+mlflow.set_experiment(experiment_name=experiment_name)
 
 # Loop through the hyperparameter combinations and log results in separate runs
 for params in ParameterGrid(elasticnet_param_grid):
@@ -40,6 +65,7 @@ for params in ParameterGrid(elasticnet_param_grid):
         mlflow.sklearn.log_model(
             lr,
             "ElasticNet",
-             input_example=X_train,
-             code_paths=['train.py','params.py','utils.py']
+            registered_model_name=model_name
+            input_example=X_train,
+            code_paths=['train.py','params.py','utils.py']
         )
